@@ -7,10 +7,12 @@ import com.careem.voice.notes.service.services.JourneyService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class JourneyServiceImpl implements JourneyService{
 
     @Autowired

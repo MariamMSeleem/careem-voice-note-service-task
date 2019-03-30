@@ -22,7 +22,7 @@ public class VoiceNote extends BaseEntity {
 
     private String link;
 
-    @OneToMany(mappedBy = "voiceNoteId")
+    @OneToMany(mappedBy = "voiceNote")
     private List<VoiceNoteRiderLog> riderLogs;
 
     public VoiceNote(String voiceNoteExternalId, String link){

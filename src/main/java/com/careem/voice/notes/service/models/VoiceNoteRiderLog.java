@@ -18,6 +18,7 @@ public class VoiceNoteRiderLog extends BaseEntity {
     @ManyToOne
     private VoiceNote voiceNote;
 
+    @ManyToOne
     private Rider rider;
 
     private Boolean received;
