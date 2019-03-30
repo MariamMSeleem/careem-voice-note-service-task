@@ -16,8 +16,6 @@ import java.util.List;
 @Table(indexes = {@Index(name = "trackingId", columnList = "trackingId", unique = true)})
 public class Journey extends BaseEntity {
 
-    private String driverId;
-
     private String trackingId;
 
     @OneToMany(mappedBy = "journey")
@@ -26,8 +24,7 @@ public class Journey extends BaseEntity {
     @OneToMany(mappedBy = "journey")
     private List<Rider> riders;
 
-    public Journey(String trackingId, String driverId){
+    public Journey(String trackingId){
         this.trackingId = trackingId;
-        this.driverId = driverId;
     }
 }

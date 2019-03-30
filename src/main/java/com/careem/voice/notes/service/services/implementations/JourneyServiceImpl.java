@@ -18,8 +18,8 @@ public class JourneyServiceImpl implements JourneyService{
     @Autowired
     private JourneyRepository journeyRepository;
 
-    public Journey startJourney(String journeyTrackingId, String driverId){
-        Journey journey = new Journey(journeyTrackingId, driverId);
+    public Journey startJourney(String journeyTrackingId){
+        Journey journey = new Journey(journeyTrackingId);
         return journeyRepository.save(journey);
     }
 

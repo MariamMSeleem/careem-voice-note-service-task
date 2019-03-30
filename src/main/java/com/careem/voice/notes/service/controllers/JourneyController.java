@@ -18,9 +18,8 @@ public class JourneyController {
     private JourneyService journeyService;
 
     @PostMapping("/{journeyTrackingId}/start")
-    public ResponseEntity<ApiResponse<Journey>> startJourney(@PathVariable(name = "journeyTrackingId") String journeyTrackingId,
-                                                             @RequestParam(value = "driverId") String driverId){
-        Journey journey = journeyService.startJourney(journeyTrackingId, driverId);
+    public ResponseEntity<ApiResponse<Journey>> startJourney(@PathVariable(name = "journeyTrackingId") String journeyTrackingId){
+        Journey journey = journeyService.startJourney(journeyTrackingId);
         return new ResponseEntity(new ApiResponse(HttpStatus.CREATED, true,
                 "Journey with id:" +journeyTrackingId + " is successfully started.", journey), HttpStatus.CREATED);
     }
@@ -32,7 +31,7 @@ public class JourneyController {
     }
 
     @PostMapping("/{journeyTrackingId}/rider/{customerId}")
-    public ResponseEntity<String> muteRiderFromJourney(@PathVariable(name = "riderId") String customerId,
+    public ResponseEntity<String> muteRiderFromJourney(@PathVariable(name = "customerId") String customerId,
                                                      @PathVariable(name = "journeyTrackingId") String journeyTrackingId) throws NotFoundException{
         return new ResponseEntity<>(journeyService.muteRiderFromJourney(journeyTrackingId, customerId), HttpStatus.OK);
     }
