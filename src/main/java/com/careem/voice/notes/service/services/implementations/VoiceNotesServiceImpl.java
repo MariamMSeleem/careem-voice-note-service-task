@@ -40,13 +40,14 @@ public class VoiceNotesServiceImpl implements VoiceNoteService{
 
             List<VoiceNoteRiderLog> riderLogs =  new ArrayList<>();
             for (Rider rider: journey.getRiders()) {
-                boolean voiceNoteSent = customerAppServiceGateway.sendVoiceNote(voiceNoteLink, rider.getCustomerId());
-                if(!voiceNoteSent) {
-                    //TODO: create a scheduled function to send to failed customers
-                }
-                else{
-                    VoiceNoteRiderLog voiceNoteRiderLog = new VoiceNoteRiderLog(voiceNote, rider, false, false);
-                    riderLogs.add(voiceNoteRiderLog);
+                if(rider.getStillWaiting()) {
+                    boolean voiceNoteSent = customerAppServiceGateway.sendVoiceNote(voiceNoteLink, rider.getCustomerId());
+                    if (!voiceNoteSent) {
+                        //TODO: create a scheduled function to send to failed customers
+                    } else {
+                        VoiceNoteRiderLog voiceNoteRiderLog = new VoiceNoteRiderLog(voiceNote, rider, false, false);
+                        riderLogs.add(voiceNoteRiderLog);
+                    }
                 }
             }
             voiceNote.setRiderLogs(riderLogs);
