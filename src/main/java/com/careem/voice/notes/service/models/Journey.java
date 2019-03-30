@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.stereotype.Service;
 
 import javax.persistence.*;
 import java.util.List;
@@ -14,19 +13,20 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Journey extends AuditableEntity{
+public class Journey extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private String driverId;
 
-    String driverId;
-
-    String trackingId;
+    private String trackingId;
 
     @OneToMany(mappedBy = "journeyId")
-    List<VoiceNote> voiceNotes;
+    private List<VoiceNote> voiceNotes;
 
     @OneToMany(mappedBy = "journeyId")
-    List<Rider> riders;
+    private List<Rider> riders;
+
+    public Journey(String trackingId, String driverId){
+        this.trackingId = trackingId;
+        this.driverId = driverId;
+    }
 }

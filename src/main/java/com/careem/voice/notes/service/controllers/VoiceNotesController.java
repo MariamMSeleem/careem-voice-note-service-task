@@ -1,5 +1,6 @@
 package com.careem.voice.notes.service.controllers;
 
+import javassist.NotFoundException;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,7 @@ public class VoiceNotesController {
 
     @PostMapping("/send")
     public ResponseEntity<String> sendVoiceNote(@RequestBody String  voiceNoteLink,
-                                                       @PathVariable(name = "journeyId") String journeyId){
+                                                @PathVariable(name = "journeyId") String journeyId)throws NotFoundException {
         return new ResponseEntity<String>("Voice Note Sent Successfully", HttpStatus.OK);
     }
 

@@ -6,27 +6,27 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Rider extends AuditableEntity{
+public class Rider extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    @ManyToOne
+    private Journey journey;
 
-    Long journeyId;
+    private Integer riderId;
 
-    Long riderId;
+    private String customerId;
 
-    String customerId;
+    private Boolean stillWaiting;
 
-    Boolean stillWaiting;
+    public Rider(Integer riderId, String customerId, Boolean stillWaiting){
+        this.riderId = riderId;
+        this.customerId = customerId;
+        this.stillWaiting = stillWaiting;
+    }
 }

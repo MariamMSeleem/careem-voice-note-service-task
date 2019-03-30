@@ -13,18 +13,21 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class VoiceNote extends AuditableEntity{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+public class VoiceNote extends BaseEntity {
 
-    String voiceNoteExternalId;
+    private String voiceNoteExternalId;
 
-    Long journeyId;
+    @ManyToOne
+    private Journey journey;
 
-    String link;
+    private String link;
 
     @OneToMany(mappedBy = "voiceNoteId")
-    List<VoiceNoteCustomerLog> customerLogs;
+    private List<VoiceNoteRiderLog> riderLogs;
+
+    public VoiceNote(String voiceNoteExternalId, String link){
+        this.voiceNoteExternalId = voiceNoteExternalId;
+        this.link = link;
+    }
 
 }
