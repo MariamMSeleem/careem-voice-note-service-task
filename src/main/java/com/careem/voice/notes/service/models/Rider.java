@@ -13,19 +13,18 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(uniqueConstraints={
+        @UniqueConstraint(columnNames = {"journey_id", "customerId"})})
 public class Rider extends BaseEntity {
 
     @ManyToOne
     private Journey journey;
 
-    private Integer riderId;
-
     private String customerId;
 
     private Boolean stillWaiting;
 
-    public Rider(Integer riderId, String customerId, Boolean stillWaiting){
-        this.riderId = riderId;
+    public Rider(String customerId, Boolean stillWaiting){
         this.customerId = customerId;
         this.stillWaiting = stillWaiting;
     }

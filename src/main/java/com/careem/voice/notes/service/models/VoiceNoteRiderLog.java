@@ -13,6 +13,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(uniqueConstraints={
+        @UniqueConstraint(columnNames = {"voice_note_id", "rider_id"})})
 public class VoiceNoteRiderLog extends BaseEntity {
 
     @ManyToOne

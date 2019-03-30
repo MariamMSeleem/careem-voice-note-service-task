@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(indexes = {@Index(name = "trackingId", columnList = "trackingId", unique = true)})
 public class Journey extends BaseEntity {
 
     private String driverId;

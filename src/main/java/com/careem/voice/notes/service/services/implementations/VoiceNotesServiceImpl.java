@@ -1,5 +1,7 @@
 package com.careem.voice.notes.service.services.implementations;
 
+import com.careem.voice.notes.service.dtos.VoiceNoteInfo;
+import com.careem.voice.notes.service.enums.VoiceNoteStatus;
 import com.careem.voice.notes.service.models.Journey;
 import com.careem.voice.notes.service.models.Rider;
 import com.careem.voice.notes.service.models.VoiceNote;
@@ -20,10 +22,10 @@ import java.util.List;
 
 public class VoiceNotesServiceImpl implements VoiceNoteService{
     @Autowired
-    JourneyRepository journeyRepository;
+    private JourneyRepository journeyRepository;
 
     @Autowired
-    CustomerAppServiceGateway customerAppServiceGateway;
+    private CustomerAppServiceGateway customerAppServiceGateway;
 
 
     @Transactional
@@ -48,7 +50,6 @@ public class VoiceNotesServiceImpl implements VoiceNoteService{
                 }
             }
             voiceNote.setRiderLogs(riderLogs);
-
             voiceNotes.add(voiceNote);
             journey.setVoiceNotes(voiceNotes);
             journeyRepository.save(journey);
@@ -59,11 +60,100 @@ public class VoiceNotesServiceImpl implements VoiceNoteService{
         }
     }
 
-    public String getVoiceNoteInfo(String voiceNoteId, String journeyId){
-        return "";
+    public VoiceNoteInfo getVoiceNoteInfo(String voiceNoteId, String journeyTrackingId) throws NotFoundException{
+        VoiceNoteInfo voiceNoteInfo = new VoiceNoteInfo();
+        Journey journey = journeyRepository.findByTrackingId(journeyTrackingId);
+        if(journey != null) {
+            VoiceNote voiceNote = null;
+            if(journey.getVoiceNotes() != null){
+                for (VoiceNote journeyVoiceNote: journey.getVoiceNotes()) {
+                    if(voiceNote.getVoiceNoteExternalId().equals(voiceNoteId)){
+                        voiceNote = journeyVoiceNote;
+                    }
+                }
+                if(voiceNote != null){
+                    List<String> ridersReceivedVoiceNote = new ArrayList<>();
+                    List<String> ridersListenedToVoiceNote = new ArrayList<>();
+                    if(voiceNote.getRiderLogs() != null) {
+                        for (VoiceNoteRiderLog voiceNoteRiderLog : voiceNote.getRiderLogs()) {
+                            if (voiceNoteRiderLog.getReceived())
+                                ridersReceivedVoiceNote.add(voiceNoteRiderLog.getRider().getCustomerId());
+                            if (voiceNoteRiderLog.getListened())
+                                ridersListenedToVoiceNote.add(voiceNoteRiderLog.getRider().getCustomerId());
+                        }
+                    }
+
+                    voiceNoteInfo.setCustomersListenedToVoiceNote(ridersListenedToVoiceNote);
+                    voiceNoteInfo.setCustomersReceivedVoiceNote(ridersReceivedVoiceNote);
+                    voiceNoteInfo.setVoiceNoteId(voiceNoteId);
+                    return voiceNoteInfo;
+                }
+                else{
+                    throw new NotFoundException("Voice Note with ID:" + voiceNoteId +" for Journey with tracking ID: " + journeyTrackingId + " doesn't not exist.");
+                }
+            }
+            else{
+                throw new NotFoundException("Voice Note with ID:" + voiceNoteId +" for Journey with tracking ID: " + journeyTrackingId + " doesn't not exist.");
+            }
+        }
+        else{
+            throw new NotFoundException("Journey with tracking ID: " + journeyTrackingId + " doesn't not exist.");
+        }
     }
 
-    public String sendVoiceNoteStatus(String voiceNoteStatus, String journeyId, String voiceNoteId, String riderId){
-        return "";
+    public VoiceNoteRiderLog updateVoiceNoteStatus(VoiceNoteStatus voiceNoteStatus, String journeyTrackingId,
+                                                 String voiceNoteId, String customerId) throws NotFoundException{
+        VoiceNoteRiderLog voiceNoteRiderLog = null;
+        int voiceNoteIndex = -1;
+        Journey journey = journeyRepository.findByTrackingId(journeyTrackingId);
+        if (journey != null) {
+            VoiceNote voiceNote = null;
+            if (journey.getVoiceNotes() != null) {
+                int index = 0;
+                for (VoiceNote journeyVoiceNote : journey.getVoiceNotes()) {
+                    if (voiceNote.getVoiceNoteExternalId().equals(voiceNoteId)) {
+                        voiceNote = journeyVoiceNote;
+                        voiceNoteIndex = index;
+                    }
+                    index++;
+                }
+                if (voiceNote != null) {
+                    if (voiceNote.getRiderLogs() != null) {
+                        for (VoiceNoteRiderLog journeyVoiceNoteRiderLog : voiceNote.getRiderLogs()) {
+                            if(journeyVoiceNoteRiderLog.getRider().getCustomerId().equals(customerId)){
+                                if(voiceNoteStatus.equals(VoiceNoteStatus.RECEIVED)){
+                                    journeyVoiceNoteRiderLog.setReceived(true);
+                                }
+                                else if(voiceNoteStatus.equals(VoiceNoteStatus.LISTENED)){
+                                    journeyVoiceNoteRiderLog.setReceived(true);
+                                    journeyVoiceNoteRiderLog.setListened(true);
+                                }
+                                voiceNoteRiderLog = journeyVoiceNoteRiderLog;
+                            }
+                        }
+                        if(voiceNoteRiderLog != null){
+                            List<VoiceNote> voiceNotes = journey.getVoiceNotes();
+                            voiceNotes.set(voiceNoteIndex, voiceNote);
+                            journey.setVoiceNotes(voiceNotes);
+                            journeyRepository.save(journey);
+                            return voiceNoteRiderLog;
+                        }
+                        else{
+                            throw new NotFoundException("Rider with ID:" + customerId + " is not associated with voice note with ID:" + voiceNoteId + ".");
+                        }
+                    }
+                    else{
+                        throw new NotFoundException("Rider with ID:" + customerId + " is not associated with voice note with ID:" + voiceNoteId + ".");
+                    }
+                } else {
+                    throw new NotFoundException("Voice Note with ID:" + voiceNoteId + " for Journey with tracking ID: " + journeyTrackingId + " doesn't not exist.");
+                }
+            } else {
+                throw new NotFoundException("Voice Note with ID:" + voiceNoteId + " for Journey with tracking ID: " + journeyTrackingId + " doesn't not exist.");
+            }
+        } else {
+            throw new NotFoundException("Journey with tracking ID: " + journeyTrackingId + " doesn't not exist.");
+        }
     }
+
 }

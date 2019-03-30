@@ -1,6 +1,13 @@
 package com.careem.voice.notes.service.controllers;
 
+import com.careem.voice.notes.service.dtos.VoiceNoteInfo;
+import com.careem.voice.notes.service.enums.VoiceNoteStatus;
+import com.careem.voice.notes.service.models.VoiceNote;
+import com.careem.voice.notes.service.models.VoiceNoteRiderLog;
+import com.careem.voice.notes.service.services.VoiceNoteService;
+import com.careem.voice.notes.service.utils.ApiResponse;
 import javassist.NotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,25 +17,32 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/api/journey/{journeyTrackingId}/voice-note/")
 public class VoiceNotesController {
 
+    @Autowired
+    private VoiceNoteService voiceNoteService;
+
     @PostMapping("/send")
-    public ResponseEntity<String> sendVoiceNote(@RequestBody String  voiceNoteLink,
-                                                @PathVariable(name = "journeyId") String journeyId)throws NotFoundException {
-        return new ResponseEntity<String>("Voice Note Sent Successfully", HttpStatus.OK);
+    public ResponseEntity<String> sendVoiceNote(@RequestParam String  voiceNoteLink,
+                                                @PathVariable(name = "journeyTrackingId") String journeyTrackingId) throws NotFoundException {
+        return new ResponseEntity<String>(voiceNoteService.sendVoiceNote(voiceNoteLink, journeyTrackingId), HttpStatus.OK);
     }
 
 
     @GetMapping("/{voiceNoteId}/info")
-    public ResponseEntity<String> getVoiceNoteInfo(@PathVariable(name = "voiceNoteID") String voiceNoteId,
-                                                   @PathVariable(name = "journeyId") String journeyId){
-        return new ResponseEntity<String>("List of riders ids who listened or received ", HttpStatus.OK);
+    public ResponseEntity<VoiceNoteInfo> getVoiceNoteInfo(@PathVariable(name = "voiceNoteID") String voiceNoteId,
+                                                          @PathVariable(name = "journeyTrackingId") String journeyTrackingId) throws NotFoundException{
+        VoiceNoteInfo voiceNoteInfo = voiceNoteService.getVoiceNoteInfo(voiceNoteId, journeyTrackingId);
+        return  new ResponseEntity(new ApiResponse(HttpStatus.OK, true,null, voiceNoteInfo), HttpStatus.OK);
     }
 
-    @PostMapping("/{voiceNoteId}/rider/{riderId}/status")
-    public ResponseEntity<String> sendVoiceNoteStatus(@RequestBody String  voiceNoteStatus,
-                                                      @PathVariable(name = "journeyId") String journeyId,
-                                                      @PathVariable(name = "voiceNoteID") String voiceNoteId,
-                                                      @PathVariable(name = "riderId") String riderId){
-        return new ResponseEntity<String>("Send voice note status, received or listened", HttpStatus.OK);
+    @PutMapping("/{voiceNoteId}/rider/{customerId}/status")
+    public ResponseEntity<VoiceNoteRiderLog> updateVoiceNoteStatus(@RequestParam VoiceNoteStatus voiceNoteStatus,
+                                                                 @PathVariable(name = "journeyTrackingId") String journeyTrackingId,
+                                                                 @PathVariable(name = "voiceNoteID") String voiceNoteId,
+                                                                 @PathVariable(name = "customerId") String customerId) throws NotFoundException{
+
+        VoiceNoteRiderLog voiceNoteRiderLog = voiceNoteService.updateVoiceNoteStatus(voiceNoteStatus, journeyTrackingId, voiceNoteId, customerId);
+        return  new ResponseEntity(new ApiResponse(HttpStatus.OK, true,"Voice note status successfully updated.", voiceNoteRiderLog), HttpStatus.OK);
+
     }
 
 }

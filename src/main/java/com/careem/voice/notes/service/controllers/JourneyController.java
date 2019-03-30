@@ -1,9 +1,10 @@
 package com.careem.voice.notes.service.controllers;
 
+import com.careem.voice.notes.service.models.Journey;
 import com.careem.voice.notes.service.services.JourneyService;
+import com.careem.voice.notes.service.utils.ApiResponse;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,24 +15,26 @@ import org.springframework.web.bind.annotation.*;
 public class JourneyController {
 
     @Autowired
-    JourneyService journeyService;
+    private JourneyService journeyService;
 
     @PostMapping("/{journeyTrackingId}/start")
-    public ResponseEntity<String> startJourney(@PathVariable(name = "journeyTrackingId") String journeyTrackingId,
-                                               @Param(value = "driverId") String driverId){
-        return new ResponseEntity<>(journeyService.startJourney(journeyTrackingId, driverId), HttpStatus.CREATED);
+    public ResponseEntity<ApiResponse<Journey>> startJourney(@PathVariable(name = "journeyTrackingId") String journeyTrackingId,
+                                                             @RequestParam(value = "driverId") String driverId){
+        Journey journey = journeyService.startJourney(journeyTrackingId, driverId);
+        return new ResponseEntity(new ApiResponse(HttpStatus.CREATED, true,
+                "Journey with id:" +journeyTrackingId + " is successfully started.", journey), HttpStatus.CREATED);
     }
 
     @PostMapping("/{journeyTrackingId}/subscribe")
-    public ResponseEntity<String> subscribeToJourney(@RequestBody String  customerId,
+    public ResponseEntity<String> subscribeToJourney(@RequestParam String  customerId,
                                                      @PathVariable(name = "journeyTrackingId") String journeyTrackingId) throws NotFoundException{
         return new ResponseEntity<>(journeyService.subscribeToJourney(journeyTrackingId, customerId), HttpStatus.OK);
     }
 
-    @PostMapping("/{journeyTrackingId}/rider/{riderId}")
-    public ResponseEntity<String> muteRiderFromJourney(@PathVariable(name = "riderId") String riderId,
+    @PostMapping("/{journeyTrackingId}/rider/{customerId}")
+    public ResponseEntity<String> muteRiderFromJourney(@PathVariable(name = "riderId") String customerId,
                                                      @PathVariable(name = "journeyTrackingId") String journeyTrackingId) throws NotFoundException{
-        return new ResponseEntity<>(journeyService.muteRiderFromJourney(journeyTrackingId, riderId), HttpStatus.OK);
+        return new ResponseEntity<>(journeyService.muteRiderFromJourney(journeyTrackingId, customerId), HttpStatus.OK);
     }
 
 }
