@@ -18,9 +18,9 @@ public class JourneyServiceImpl implements JourneyService{
     @Autowired
     private JourneyRepository journeyRepository;
 
-    public Journey startJourney(String journeyTrackingId){
+    public void startJourney(String journeyTrackingId){
         Journey journey = new Journey(journeyTrackingId);
-        return journeyRepository.save(journey);
+        journeyRepository.save(journey);
     }
 
     public String subscribeToJourney(String journeyTrackingId, String customerId) throws NotFoundException{

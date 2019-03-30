@@ -1,11 +1,16 @@
 package com.careem.voice.notes.service.utils;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.Arrays;
 import java.util.List;
 
+@Getter
+@Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse<T> {
     private HttpStatus status;
@@ -53,5 +58,9 @@ public class ApiResponse<T> {
         this.message = message;
         this.data = data;
         this.errors = errors;
+    }
+
+    public String toString() {
+        return "ApiResponse(status=" + this.getStatus() + ", success=" + this.isSuccess() + ", code=" + this.getCode() + ", message=" + this.getMessage() + ", data=" + this.getData() + ", errors=" + this.getErrors() + ")";
     }
 }

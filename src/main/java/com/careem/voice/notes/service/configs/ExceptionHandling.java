@@ -30,9 +30,8 @@ public class ExceptionHandling{
             String msg = cause.getSQLException().getMessage();
             errors.add(msg);
             log.error(msg, ex);
-
-                return new ResponseEntity(new ApiResponse(HttpStatus.CONFLICT, false, DATA_ALREADY_EXISTS + ", " + constrainViolationMsg,  errors), HttpStatus.CONFLICT);
-
+            ResponseEntity responseEntity = new ResponseEntity(new ApiResponse(HttpStatus.CONFLICT, false, DATA_ALREADY_EXISTS + ", " + constrainViolationMsg,  errors), HttpStatus.CONFLICT);
+            return responseEntity;
         }
         String msg = INTERNAL_SERVER_ERROR + ex.getMessage();
         log.error(msg, ex);

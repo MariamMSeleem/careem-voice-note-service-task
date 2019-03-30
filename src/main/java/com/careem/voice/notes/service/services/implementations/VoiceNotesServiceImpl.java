@@ -1,6 +1,7 @@
 package com.careem.voice.notes.service.services.implementations;
 
 import com.careem.voice.notes.service.dtos.VoiceNoteInfo;
+import com.careem.voice.notes.service.dtos.VoiceNoteRiderLogDto;
 import com.careem.voice.notes.service.enums.VoiceNoteStatus;
 import com.careem.voice.notes.service.models.Journey;
 import com.careem.voice.notes.service.models.Rider;
@@ -28,7 +29,6 @@ public class VoiceNotesServiceImpl implements VoiceNoteService{
     private CustomerAppServiceGateway customerAppServiceGateway;
 
 
-    @Transactional
     public String sendVoiceNote(String voiceNoteLink, String journeyTrackingId) throws NotFoundException{
         Journey journey = journeyRepository.findByTrackingId(journeyTrackingId);
         if(journey != null) {
@@ -47,13 +47,14 @@ public class VoiceNotesServiceImpl implements VoiceNoteService{
                     } else {
                         VoiceNoteRiderLog voiceNoteRiderLog = new VoiceNoteRiderLog(voiceNote, rider, false, false);
                         riderLogs.add(voiceNoteRiderLog);
+                        voiceNote.setRiderLogs(riderLogs);
+                        voiceNotes.add(voiceNote);
+                        journey.setVoiceNotes(voiceNotes);
+                        journeyRepository.save(journey);
                     }
                 }
             }
-            voiceNote.setRiderLogs(riderLogs);
-            voiceNotes.add(voiceNote);
-            journey.setVoiceNotes(voiceNotes);
-            journeyRepository.save(journey);
+
             return "Voice note successfully sent to riders.";
         }
         else{
@@ -102,7 +103,7 @@ public class VoiceNotesServiceImpl implements VoiceNoteService{
         }
     }
 
-    public VoiceNoteRiderLog updateVoiceNoteStatus(VoiceNoteStatus voiceNoteStatus, String journeyTrackingId,
+    public VoiceNoteRiderLogDto updateVoiceNoteStatus(VoiceNoteStatus voiceNoteStatus, String journeyTrackingId,
                                                  String voiceNoteId, String customerId) throws NotFoundException{
         VoiceNoteRiderLog voiceNoteRiderLog = null;
         int voiceNoteIndex = -1;
@@ -137,7 +138,8 @@ public class VoiceNotesServiceImpl implements VoiceNoteService{
                             voiceNotes.set(voiceNoteIndex, voiceNote);
                             journey.setVoiceNotes(voiceNotes);
                             journeyRepository.save(journey);
-                            return voiceNoteRiderLog;
+                            return new VoiceNoteRiderLogDto(voiceNoteRiderLog.getVoiceNote().getVoiceNoteExternalId(),
+                                    voiceNoteRiderLog.getRider().getCustomerId(), voiceNoteRiderLog.getReceived(), voiceNoteRiderLog.getListened());
                         }
                         else{
                             throw new NotFoundException("Rider with ID:" + customerId + " is not associated with voice note with ID:" + voiceNoteId + ".");

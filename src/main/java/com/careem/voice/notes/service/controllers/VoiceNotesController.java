@@ -1,6 +1,7 @@
 package com.careem.voice.notes.service.controllers;
 
 import com.careem.voice.notes.service.dtos.VoiceNoteInfo;
+import com.careem.voice.notes.service.dtos.VoiceNoteRiderLogDto;
 import com.careem.voice.notes.service.enums.VoiceNoteStatus;
 import com.careem.voice.notes.service.models.VoiceNote;
 import com.careem.voice.notes.service.models.VoiceNoteRiderLog;
@@ -35,12 +36,12 @@ public class VoiceNotesController {
     }
 
     @PutMapping("/{voiceNoteId}/rider/{customerId}/status")
-    public ResponseEntity<VoiceNoteRiderLog> updateVoiceNoteStatus(@RequestParam VoiceNoteStatus voiceNoteStatus,
+    public ResponseEntity<VoiceNoteRiderLogDto> updateVoiceNoteStatus(@RequestParam VoiceNoteStatus voiceNoteStatus,
                                                                  @PathVariable(name = "journeyTrackingId") String journeyTrackingId,
                                                                  @PathVariable(name = "voiceNoteID") String voiceNoteId,
                                                                  @PathVariable(name = "customerId") String customerId) throws NotFoundException{
 
-        VoiceNoteRiderLog voiceNoteRiderLog = voiceNoteService.updateVoiceNoteStatus(voiceNoteStatus, journeyTrackingId, voiceNoteId, customerId);
+        VoiceNoteRiderLogDto voiceNoteRiderLog = voiceNoteService.updateVoiceNoteStatus(voiceNoteStatus, journeyTrackingId, voiceNoteId, customerId);
         return  new ResponseEntity(new ApiResponse(HttpStatus.OK, true,"Voice note status successfully updated.", voiceNoteRiderLog), HttpStatus.OK);
 
     }
