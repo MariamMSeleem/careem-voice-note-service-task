@@ -1,4 +1,4 @@
-<h1>Uni-Directional Voice Notes Microservice</h1>
+<h1>UniDirectional Voice Notes Microservice</h1>
 
 <h2>Summary</h2>
 This service is responsible for sending the voice notes from the captain to the riders waiting for this bus.
@@ -44,16 +44,18 @@ There are 4 tables in the DB (please refer to the diagram for field details):
 * **Voice Note Rider Log**
 
 * Each Journey had multiple riders and multiple voice notes (one to many relationship). 
-* Each voice note has multiple voice note rider logs (one to many relationship)
-* Each rider has multiple voice note rider logs (one to many relationship)
+* Each voice note has multiple voice note rider logs (one to many relationship).
+* Each rider has multiple voice note rider logs (one to many relationship).
 
 ![Database architecture](https://github.com/MariamMSeleem/careem-voice-note-service-task/blob/development/voice-note-service-DB.png)
 
 <h2>Technology justification</h2>
-
+Java is one of the best languages suitable for microservices because  it is highly structured and efficient in execution and resources and have extensive libraries of business tools available. Spring Boot is easily one of the best Java microservices framework, Spring Boot integrates optimally with other supporting languages. Also Dependency injection and library integrations an essential feature in spring boot framework because it facilitates a lot of overhead work which leaves room for increased productivity. That's why Java and Spring boot were my choice.
+I used swagger as an API documentaion tool because it's efficient and also gives you a development portal, which allows for testing the APIs.
+I used postgres because I needed structural database architecture, so a SQL database was a much better choice than NOSQL database. Either MySQL or Postgres can be used as they are both efficient and free. Postgres is used by Heroku so it was the obvious choice in this case. 
 
 <h2>Additional notes</h2>
-Redis can be used to store the list of riders who received or listened to the voice note. It will be quickly accsessed and if we don't need to store that info, it will be deleted automatically after a configurale period of time as it is volatile.
+Redis can be used to store the list of riders who received or listened to the voice note. It will be quickly accsessed and if we don't need to store that info, it will be deleted automatically after a configurable period of time as it is volatile.
 
 
 
