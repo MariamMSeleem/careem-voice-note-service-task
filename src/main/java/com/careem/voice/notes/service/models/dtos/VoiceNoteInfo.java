@@ -1,4 +1,4 @@
-package com.careem.voice.notes.service.dtos;
+package com.careem.voice.notes.service.models.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

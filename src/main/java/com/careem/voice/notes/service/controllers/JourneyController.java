@@ -1,8 +1,8 @@
 package com.careem.voice.notes.service.controllers;
 
-import com.careem.voice.notes.service.models.Journey;
+import com.careem.voice.notes.service.models.entities.enums.RiderStatus;
 import com.careem.voice.notes.service.services.JourneyService;
-import com.careem.voice.notes.service.utils.ApiResponse;
+import com.careem.voice.notes.service.controllers.utils.ApiResponse;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,23 +17,26 @@ public class JourneyController {
     @Autowired
     private JourneyService journeyService;
 
-    @PostMapping("/{journeyTrackingId}/start")
+    @PostMapping("/{journeyTrackingId}/start/")
     public ResponseEntity<ApiResponse<String>> startJourney(@PathVariable(name = "journeyTrackingId") String journeyTrackingId){
         journeyService.startJourney(journeyTrackingId);
         return new ResponseEntity(new ApiResponse(HttpStatus.CREATED, true,
-                "Journey with id:" +journeyTrackingId + " is successfully started.", (Object) null), HttpStatus.CREATED);
+                "Journey with id:" +journeyTrackingId + " is successfully started.", null), HttpStatus.CREATED);
     }
 
-    @PostMapping("/{journeyTrackingId}/subscribe")
-    public ResponseEntity<String> subscribeToJourney(@RequestParam String  customerId,
+    @PostMapping("/{journeyTrackingId}/subscribe/")
+    public ResponseEntity<String> subscribeToJourney(@RequestParam(name = "customerId") String  customerId,
                                                      @PathVariable(name = "journeyTrackingId") String journeyTrackingId) throws NotFoundException{
-        return new ResponseEntity<>(journeyService.subscribeToJourney(journeyTrackingId, customerId), HttpStatus.OK);
+        String confirmationMessage = journeyService.subscribeToJourney(journeyTrackingId, customerId);
+        return new ResponseEntity(new ApiResponse(HttpStatus.OK, true, confirmationMessage, null), HttpStatus.OK);
     }
 
-    @PostMapping("/{journeyTrackingId}/rider/{customerId}")
-    public ResponseEntity<String> muteRiderFromJourney(@PathVariable(name = "customerId") String customerId,
-                                                     @PathVariable(name = "journeyTrackingId") String journeyTrackingId) throws NotFoundException{
-        return new ResponseEntity<>(journeyService.muteRiderFromJourney(journeyTrackingId, customerId), HttpStatus.OK);
+    @PatchMapping("/{journeyTrackingId}/rider/{customerId}/")
+    public ResponseEntity<String> updateRiderStatus(@PathVariable(name = "customerId") String customerId,
+                                                    @PathVariable(name = "journeyTrackingId") String journeyTrackingId,
+                                                    @RequestParam(name = "riderStatus")RiderStatus riderStatus) throws NotFoundException{
+        String confirmationMessage = journeyService.updateRiderStatus(journeyTrackingId, customerId, riderStatus);
+        return new ResponseEntity(new ApiResponse(HttpStatus.OK, true, confirmationMessage, null), HttpStatus.OK);
     }
 
 

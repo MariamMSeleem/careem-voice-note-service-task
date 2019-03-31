@@ -1,7 +1,7 @@
 package com.careem.voice.notes.service.controllers;
 
 
-import com.careem.voice.notes.service.utils.ApiResponse;
+import com.careem.voice.notes.service.controllers.utils.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

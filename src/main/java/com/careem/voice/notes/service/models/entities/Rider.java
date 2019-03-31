@@ -1,6 +1,7 @@
-package com.careem.voice.notes.service.models;
+package com.careem.voice.notes.service.models.entities;
 
 
+import com.careem.voice.notes.service.models.entities.enums.RiderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,10 +23,11 @@ public class Rider extends BaseEntity {
 
     private String customerId;
 
-    private Boolean stillWaiting;
+    @Enumerated(value = EnumType.STRING)
+    private RiderStatus riderStatus;
 
-    public Rider(String customerId, Boolean stillWaiting){
+    public Rider(String customerId, RiderStatus riderStatus){
         this.customerId = customerId;
-        this.stillWaiting = stillWaiting;
+        this.riderStatus = riderStatus;
     }
 }

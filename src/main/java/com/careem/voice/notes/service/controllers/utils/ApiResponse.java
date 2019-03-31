@@ -1,10 +1,9 @@
-package com.careem.voice.notes.service.utils;
+package com.careem.voice.notes.service.controllers.utils;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.Arrays;
 import java.util.List;

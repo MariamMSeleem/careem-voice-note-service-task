@@ -1,4 +1,4 @@
-package com.careem.voice.notes.service.enums;
+package com.careem.voice.notes.service.models.dtos.enums;
 
 public enum VoiceNoteStatus {
     RECEIVED,

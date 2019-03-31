@@ -1,4 +1,4 @@
-package com.careem.voice.notes.service.models;
+package com.careem.voice.notes.service.models.entities;
 
 
 import lombok.AllArgsConstructor;

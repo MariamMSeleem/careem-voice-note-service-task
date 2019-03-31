@@ -1,9 +1,8 @@
 package com.careem.voice.notes.service.configs;
 
-import com.careem.voice.notes.service.utils.ApiResponse;
+import com.careem.voice.notes.service.controllers.utils.ApiResponse;
 import javassist.NotFoundException;
 import lombok.extern.log4j.Log4j;
-import lombok.extern.log4j.Log4j2;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
