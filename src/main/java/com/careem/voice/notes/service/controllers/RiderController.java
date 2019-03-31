@@ -16,7 +16,7 @@ public class RiderController {
     RiderService riderService;
 
     /* This API is called when a rider boards the vehicle as to stop sending the rider any further voice notes.*/
-    @PatchMapping("/rider/{customerId}/update-status")
+    @PatchMapping("{customerId}/update-status/")
     public ResponseEntity<String> updateRiderStatus(@PathVariable(name = "customerId") String customerId,
                                                     @PathVariable(name = "journeyTrackingId") String journeyTrackingId,
                                                     @RequestParam(name = "riderStatus")RiderStatus riderStatus) throws NotFoundException {
