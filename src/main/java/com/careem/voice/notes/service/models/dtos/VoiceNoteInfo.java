@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import java.util.List;
 
+
+/*Dto for the response when the getVoiceNoteInfo API is called.*/
 @Getter
 @Setter
 @AllArgsConstructor

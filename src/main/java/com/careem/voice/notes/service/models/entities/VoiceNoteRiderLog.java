@@ -8,6 +8,10 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+/**
+ * A Log for saving the status of the voice note sent
+ * for each of the riders in the journey. i.e. whether it is received or listened to
+ */
 @Getter
 @Setter
 @AllArgsConstructor

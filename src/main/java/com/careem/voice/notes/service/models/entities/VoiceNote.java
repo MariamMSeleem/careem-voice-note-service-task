@@ -9,6 +9,12 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/*
+Voice Note Entity, it stores the link for the voice note (which could be Amazon S3)
+and the external ID whee other services will communicate with this service using it
+and a reference to the journey each voice note is sent during.
+ */
 @Getter
 @Setter
 @AllArgsConstructor

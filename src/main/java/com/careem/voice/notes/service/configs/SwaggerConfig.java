@@ -13,6 +13,8 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.Collections;
+
+/*Adding swagger documentation for the APIs*/
 @Configuration
 @EnableConfigurationProperties(SwaggerProperties.class)
 @EnableSwagger2

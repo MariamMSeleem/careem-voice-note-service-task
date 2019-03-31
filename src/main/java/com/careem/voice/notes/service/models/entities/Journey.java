@@ -9,6 +9,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/*Journey Entity that riders will subscribe to and many voice notes will be sent in one journey.*/
 @Getter
 @Setter
 @AllArgsConstructor

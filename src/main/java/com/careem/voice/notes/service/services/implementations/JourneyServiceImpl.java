@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/*Implementation of the Journey Service. */
 @Service
 public class JourneyServiceImpl implements JourneyService{
 
@@ -21,50 +22,29 @@ public class JourneyServiceImpl implements JourneyService{
     @Autowired
     private RiderRepository riderRepository;
 
-    public void startJourney(String journeyTrackingId){
+    //create a journey entity with the given tracking id when a journey starts
+    public void createJourney(String journeyTrackingId){
         Journey journey = new Journey(journeyTrackingId);
         journeyRepository.save(journey);
     }
 
+    //given a customer id, subscribe to the journey as a rider
     public String subscribeToJourney(String journeyTrackingId, String customerId) throws NotFoundException{
         Journey journey = journeyRepository.findByTrackingId(journeyTrackingId);
+        //if a journey exists with this tracking id
         if(journey != null) {
+            //create a new rider attached to the given journey, initial status of the rider is waiting
             Rider rider = new Rider(customerId, RiderStatus.WAITING);
             rider.setJourney(journey);
             riderRepository.save(rider);
             return "Rider successfully subscribed to Journey " + journeyTrackingId +".";
         }
+        //throw an exception if the journey with the given tracking id didn't exist
         else{
             throw new NotFoundException("Journey with tracking ID: " + journeyTrackingId + " doesn't not exist.");
         }
     }
 
-    public String updateRiderStatus(String journeyTrackingId, String customerId, RiderStatus riderStatus) throws NotFoundException{
-        Journey journey = journeyRepository.findByTrackingId(journeyTrackingId);
-        if(journey != null) {
-            List<Rider> riders = journey.getRiders();
-            Rider foundRider = null;
-                for (Rider rider : riders) {
-                    if (rider.getCustomerId().equals(customerId)) {
-                        rider.setRiderStatus(riderStatus);
-                        foundRider = rider;
-                        break;
-                    }
-                }
-                if (foundRider != null) {
-                    riderRepository.save(foundRider);
-                    return "Rider with ID:"+ customerId + " from Journey " + journeyTrackingId + " is now " + riderStatus.getFullName() + ".";
-                }
-                else{
-                    throw new NotFoundException("Rider with ID: " + customerId + " doesn't not exist in " +
-                            "journey with tracking ID: " + customerId + ".");
-                }
-        }
-        else{
-            throw new NotFoundException("Journey with tracking ID: " + journeyTrackingId + " doesn't not exist.");
-        }
-
-    }
 
 
 }

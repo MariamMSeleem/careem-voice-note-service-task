@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
+/*Dto for the response when the updateVoiceNoteStatus API is called.*/
 @Getter
 @Setter
 @AllArgsConstructor

@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+/*Exception handling class to catch the exception thrown and display the suitable message*/
 @Log4j
 @RestControllerAdvice
 public class ExceptionHandling{
@@ -41,6 +43,13 @@ public class ExceptionHandling{
     @ExceptionHandler({NotFoundException.class})
     public ResponseEntity<?> handleRecordNotFoundException(NotFoundException ex) {
         return new ResponseEntity(new ApiResponse(HttpStatus.NOT_FOUND, false, ex.getMessage(), (Object)null, (List)null), HttpStatus.NOT_FOUND);
+
+    }
+
+    @ExceptionHandler({Exception.class})
+    public ResponseEntity<?> handleException(Exception ex) {
+        log.error("Unexpected Error", ex);
+        return new ResponseEntity(new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, false, INTERNAL_SERVER_ERROR, (Object)null,  Arrays.asList(ex.getMessage())), HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 

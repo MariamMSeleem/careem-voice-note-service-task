@@ -13,7 +13,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- *
+ Auditing and id Base class
  */
 @Getter
 @Setter

@@ -9,6 +9,12 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+/*
+Rider entity will store the customerId (retrieved from another service, either the customer app or the journey handling service)
+rider status (which is initially STILL_WAITING)
+and a reference to the journey the rider is subscribed to.
+
+ */
 @Getter
 @Setter
 @AllArgsConstructor

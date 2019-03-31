@@ -20,6 +20,7 @@ public class VoiceNotesController {
     @Autowired
     private VoiceNoteService voiceNoteService;
 
+    /*This API is called by the driver app to broadcast a voice note to all the waiting riders.*/
     @PostMapping("/send/")
     public ResponseEntity<VoiceNoteDto> sendVoiceNote(@RequestParam(name = "voiceNoteLink")  String  voiceNoteLink,
                                                    @PathVariable(name = "journeyTrackingId") String journeyTrackingId) throws NotFoundException {
@@ -29,6 +30,7 @@ public class VoiceNotesController {
     }
 
 
+    /*This API is called by the driver app to get the list of riders who received and/or listened to the voice note.*/
     @GetMapping("/{voiceNoteId}/info/")
     public ResponseEntity<VoiceNoteInfo> getVoiceNoteInfo(@PathVariable(name = "voiceNoteId") String voiceNoteId,
                                                           @PathVariable(name = "journeyTrackingId") String journeyTrackingId) throws NotFoundException{
@@ -36,6 +38,7 @@ public class VoiceNotesController {
         return  new ResponseEntity(new ApiResponse(HttpStatus.OK, true,null, voiceNoteInfo), HttpStatus.OK);
     }
 
+    /*This API is called by the customer app when a customer received or when a customer listens to a voice note.*/
     @PutMapping("/{voiceNoteId}/rider/{customerId}/status/")
     public ResponseEntity<VoiceNoteRiderLogDto> updateVoiceNoteStatus(@RequestParam(name = "voiceNoteStatus") VoiceNoteStatus voiceNoteStatus,
                                                                  @PathVariable(name = "journeyTrackingId") String journeyTrackingId,
