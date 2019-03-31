@@ -7,6 +7,7 @@ import com.careem.voice.notes.service.models.dtos.enums.VoiceNoteStatus;
 import com.careem.voice.notes.service.models.entities.VoiceNote;
 import com.careem.voice.notes.service.services.VoiceNoteService;
 import com.careem.voice.notes.service.controllers.utils.ApiResponse;
+import io.swagger.annotations.ApiOperation;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,8 @@ public class VoiceNotesController {
     @Autowired
     private VoiceNoteService voiceNoteService;
 
-    /*This API is called by the driver app to broadcast a voice note to all the waiting riders.*/
+    /*This API is called by the captain app to broadcast a voice note to all the waiting riders.*/
+    @ApiOperation(value = "Send a Voice Note", notes = "Sends voice notes from the captain to all the subscribed waiting riders.")
     @PostMapping("/send/")
     public ResponseEntity<VoiceNoteDto> sendVoiceNote(@RequestParam(name = "voiceNoteLink")  String  voiceNoteLink,
                                                    @PathVariable(name = "journeyTrackingId") String journeyTrackingId) throws NotFoundException {
@@ -30,7 +32,8 @@ public class VoiceNotesController {
     }
 
 
-    /*This API is called by the driver app to get the list of riders who received and/or listened to the voice note.*/
+    /*This API is called by the captain app to get the list of riders who received and/or listened to the voice note.*/
+    @ApiOperation(value = "Get Voice Note Info", notes = "Allows captain to check which riders received or/and listened to a voice note.")
     @GetMapping("/{voiceNoteId}/info/")
     public ResponseEntity<VoiceNoteInfo> getVoiceNoteInfo(@PathVariable(name = "voiceNoteId") String voiceNoteId,
                                                           @PathVariable(name = "journeyTrackingId") String journeyTrackingId) throws NotFoundException{
@@ -39,6 +42,8 @@ public class VoiceNotesController {
     }
 
     /*This API is called by the customer app when a customer received or when a customer listens to a voice note.*/
+    @ApiOperation(value = "Update Voice Note Status", notes = "Allows a rider to update the service " +
+            "about whether they received or listened to a certain voice note.")
     @PutMapping("/{voiceNoteId}/rider/{customerId}/status/")
     public ResponseEntity<VoiceNoteRiderLogDto> updateVoiceNoteStatus(@RequestParam(name = "voiceNoteStatus") VoiceNoteStatus voiceNoteStatus,
                                                                  @PathVariable(name = "journeyTrackingId") String journeyTrackingId,

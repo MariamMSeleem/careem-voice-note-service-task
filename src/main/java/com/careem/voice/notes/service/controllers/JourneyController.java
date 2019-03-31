@@ -2,6 +2,7 @@ package com.careem.voice.notes.service.controllers;
 
 import com.careem.voice.notes.service.services.JourneyService;
 import com.careem.voice.notes.service.controllers.utils.ApiResponse;
+import io.swagger.annotations.ApiOperation;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ public class JourneyController {
     /* When a Journey is started, this API must be called to create
     a Journey Entity for voice notes handling
     * */
+    @ApiOperation(value = "Create a Journey", notes = "Create a journey when a journey starts.")
     @PostMapping("/{journeyTrackingId}/create/")
     public ResponseEntity<ApiResponse<String>> createJourney(@PathVariable(name = "journeyTrackingId") String journeyTrackingId){
         journeyService.createJourney(journeyTrackingId);
@@ -28,6 +30,7 @@ public class JourneyController {
     }
 
     /*This API must be called when a new rider subscribes to a journey so that they can recieve voice notes.*/
+    @ApiOperation(value = "Subscribe to a Journey", notes = "Allows a rider to subscribe to an existing journey.")
     @PostMapping("/{journeyTrackingId}/subscribe/")
     public ResponseEntity<String> subscribeToJourney(@RequestParam(name = "customerId") String  customerId,
                                                      @PathVariable(name = "journeyTrackingId") String journeyTrackingId) throws NotFoundException{

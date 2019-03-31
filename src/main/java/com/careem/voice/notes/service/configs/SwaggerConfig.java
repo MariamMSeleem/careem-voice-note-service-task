@@ -30,7 +30,6 @@ public class SwaggerConfig {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .enableUrlTemplating(true)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.careem.voice.notes.service.controllers"))
                 .paths(PathSelectors.any())
