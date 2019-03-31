@@ -1,4 +1,4 @@
-<h1>UniDirectional Voice Notes Microservice</h1>
+<h1>Uni-Directional Voice Notes Microservice</h1>
 
 <h2>Summary</h2>
 This service is responsible for sending the voice notes from the captain to the riders waiting for this bus.
